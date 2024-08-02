@@ -8,24 +8,23 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region = var.region
 }
 
 provider "aws" {
   alias  = "new"
-  region = "us-west-1"
+  region = var.region1
 }
 
 
 resource "aws_iam_user" "user1" {
-  name = "ama-konadu"
+  name = var.user
   path = "/system/"
 
   tags = {
-    tag-key = "ama-konadu"
+    tag-key = var.tag
   }
 }
-
 
 data "aws_iam_policy_document" "fuse" {
   statement {
@@ -38,7 +37,7 @@ data "aws_iam_policy_document" "fuse" {
 }
 
 resource "aws_iam_policy" "policy1" {
-  name   = "s3-policyy"
+  name   = var.policyname
   path   = "/"
   policy = data.aws_iam_policy_document.fuse.json
 }
@@ -54,22 +53,22 @@ resource "aws_iam_user_policy_attachment" "policy-attach1" {
 }
 
 resource "aws_instance" "server1" {
-  ami           = "ami-0c38b837cd80f13bb"
+  ami           = var.server1
   instance_type = "t2.micro"
 
   tags = {
-    Name = "ama-server1"
+    Name = var.tagName1
   }
 }
 
 resource "aws_instance" "server2" {
-  ami = "ami-0ff591da048329e00"
+  ami = var.server2
   provider = aws.new
   instance_type = "t2.micro"
   
 
   tags = {
-    Name = "ama-server2"
+    Name = var.tagName2 
   }
 }
 
